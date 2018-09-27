@@ -1,0 +1,22 @@
+.sensor_view{
+    width: 100%;
+    border-collapse: collapse;
+    border:1px solid #000;
+}
+
+.sensor_view tr, .sensor_view td{
+    border:1px solid #000;
+}
+
+.sensor_id{
+    text-align: center;
+    padding:0 5px;
+}
+
+.realtime_loading{
+    position: fixed;
+    left:0;
+    right:0;
+    top:45%;
+    bottom:0;
+}
