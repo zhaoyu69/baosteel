@@ -38,54 +38,67 @@ export default class RealTime extends React.Component {
                 <div key={index}>
                     <table cellSpacing="0" cellPadding="0" className="sensor_view">
                         <tbody>
-                        <tr>
-                            <td rowSpan="9" className="sensor_id">{sid}</td>
-                        </tr>
-                        <tr>
-                            <td>温度(℃)</td>
-                            <td>{temp}</td>
-                        </tr>
-                        <tr>
-                            <td>X轴加速度(g)</td>
-                            <td>{ax}</td>
-                        </tr>
-                        <tr>
-                            <td>X轴速度(mm/s)</td>
-                            <td>{vx}</td>
-                        </tr>
-                        <tr>
-                            <td>Y轴加速度(g)</td>
-                            <td>{ay}</td>
-                        </tr>
-                        <tr>
-                            <td>Y轴速度(mm/s)</td>
-                            <td>{vy}</td>
-                        </tr>
-                        <tr>
-                            <td>Z轴加速度(g)</td>
-                            <td>{az}</td>
-                        </tr>
-                        <tr>
-                            <td>Z轴速度(mm/s)</td>
-                            <td>{vz}</td>
-                        </tr>
-                        <tr>
-                            <td>电量(%)</td>
-                            <td>{Number(bat)*100}</td>
-                        </tr>
-                        <tr>
-                            <td colSpan="3">{moment(stime).format('YYYY-MM-DD HH:mm:ss')}</td>
-                        </tr>
+                            <tr>
+                                <td rowSpan="9" width="20%">
+                                    <div>
+                                        <div>时间:</div>
+                                        <div>{moment(stime).format('HH:mm:ss')}</div>
+                                    </div>
+                                    <div style={{margin:"20px 0"}}>ID: {sid}</div>
+                                    <div>
+                                        <div>电量:</div>
+                                        <div>{(Number(bat)*100).toFixed(2)}%</div>
+                                    </div>
+                                </td>
+                                <td rowSpan="3" width="10%">
+                                    <div>温度</div>
+                                    <div>(℃)</div>
+                                </td>
+                                <td rowSpan="3" width="10%">{temp}</td>
+                                {/*温度曲线*/}
+                                <td rowSpan="3" width="60%">
+                                    <ReactEcharts option={this.getTOpt(sid)} style={{height:"100px"}}/>
+                                </td>
+                            </tr>
+                            <tr><td> </td></tr>
+                            <tr><td> </td></tr>
+                            <tr>
+                                <td rowSpan="3" width="10%">
+                                    <div>加速度</div>
+                                    <div>(g)</div>
+                                </td>
+                                <td width="10%">{ax}</td>
+                                {/*加速度曲线*/}
+                                <td rowSpan="3" width="60%">
+                                    <ReactEcharts option={this.getAOpt(sid)} style={{height:"100px"}}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="10%">{ay}</td>
+                            </tr>
+                            <tr>
+                                <td width="10%">{az}</td>
+                            </tr>
+                            <tr>
+                                <td rowSpan="3" width="10%">
+                                    <div>速度</div>
+                                    <div>(mm/s)</div>
+                                </td>
+                                <td width="10%">{vx}</td>
+                                {/*速度曲线*/}
+                                <td rowSpan="3" width="60%">
+                                    <ReactEcharts option={this.getVOpt(sid)} style={{height:"100px"}}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="10%">{vy}</td>
+                            </tr>
+                            <tr>
+                                <td width="10%">{vz}</td>
+                            </tr>
                         </tbody>
                     </table>
-                    {/*温度曲线*/}
-                    <ReactEcharts option={this.getTOpt(sid)} style={{height:"125px"}}/>
-                    {/*速度曲线*/}
-                    <ReactEcharts option={this.getVOpt(sid)} style={{height:"125px"}}/>
-                    {/*加速度曲线*/}
-                    <ReactEcharts option={this.getAOpt(sid)} style={{height:"125px"}}/>
                 </div>
-
             )
         });
         return (
@@ -114,14 +127,20 @@ export default class RealTime extends React.Component {
             xAxis:{
                 type: 'category',
                 boundaryGap: false,
-                data:xAxis
+                data:xAxis,
+                axisLabel:{
+                    fontSize:8
+                }
             },
             yAxis: {
-                name: "温度[℃]",
+                // name: "温度[℃]",
                 type: 'value',
                 boundaryGap: [0, '100%'],
                 splitLine: {
                     show: false
+                },
+                axisLabel:{
+                    fontSize:8
                 }
             },
             series:{
@@ -130,8 +149,10 @@ export default class RealTime extends React.Component {
                 data: series
             },
             grid: {
-                y: 30,
-                y2: 30
+                x: 30,
+                x2: 10,
+                y: 10,
+                y2: 20
             }
         };
     };
@@ -154,14 +175,20 @@ export default class RealTime extends React.Component {
             xAxis:{
                 type: 'category',
                 boundaryGap: false,
-                data:xAxis
+                data:xAxis,
+                axisLabel:{
+                    fontSize:8
+                }
             },
             yAxis: {
-                name: "速度[mm/s]",
+                // name: "速度[mm/s]",
                 type: 'value',
                 boundaryGap: [0, '100%'],
                 splitLine: {
                     show: false
+                },
+                axisLabel:{
+                    fontSize:8
                 }
             },
             series:[{
@@ -178,8 +205,10 @@ export default class RealTime extends React.Component {
                 data: vzSeries
             }],
             grid: {
-                y: 30,
-                y2: 30
+                x: 30,
+                x2: 10,
+                y: 10,
+                y2: 20
             }
         };
     };
@@ -202,14 +231,20 @@ export default class RealTime extends React.Component {
             xAxis:{
                 type: 'category',
                 boundaryGap: false,
-                data:xAxis
+                data:xAxis,
+                axisLabel:{
+                    fontSize:8
+                }
             },
             yAxis: {
-                name: "加速度[g]",
+                // name: "加速度[g]",
                 type: 'value',
                 boundaryGap: [0, '100%'],
                 splitLine: {
                     show: false
+                },
+                axisLabel:{
+                    fontSize:8
                 }
             },
             series:[{
@@ -226,8 +261,10 @@ export default class RealTime extends React.Component {
                 data: azSeries
             }],
             grid: {
-                y: 30,
-                y2: 30
+                x: 30,
+                x2: 10,
+                y: 10,
+                y2: 20
             }
         };
     }
