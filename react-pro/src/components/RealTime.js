@@ -15,6 +15,71 @@ export default class RealTime extends React.Component {
         store.connectMQTT();
     }
 
+    getTemplate=(sid="",bat="",temp="",ax="",ay="",az="",vx="",vy="",vz="",stime="")=>{
+        return <table cellSpacing="0" cellPadding="0" className="sensor_view">
+            <tbody>
+            <tr>
+                <td rowSpan="9" width="20%">
+                    <div>
+                        <div>时间:</div>
+                        <div>{stime?moment(stime).format('HH:mm:ss'):""}</div>
+                    </div>
+                    <div style={{margin:"20px 0"}}>ID: {sid}</div>
+                    <div>
+                        <div>电量:</div>
+                        <div>{bat?(Number(bat)*100).toFixed(2):""}%</div>
+                    </div>
+                </td>
+                <td rowSpan="3" width="10%">
+                    <div>温度</div>
+                    <div>(℃)</div>
+                </td>
+                <td rowSpan="3" width="10%">{temp}</td>
+                {/*温度曲线*/}
+                <td rowSpan="3" width="60%">
+                    <ReactEcharts option={sid?this.getTOpt(sid):{}} style={{height:"100px"}}/>
+                </td>
+            </tr>
+            <tr><td> </td></tr>
+            <tr><td> </td></tr>
+            <tr>
+                <td rowSpan="3" width="10%">
+                    <div>加速度</div>
+                    <div>(g)</div>
+                </td>
+                <td width="10%">{ax}</td>
+                {/*加速度曲线*/}
+                <td rowSpan="3" width="60%">
+                    <ReactEcharts option={sid?this.getAOpt(sid):{}} style={{height:"100px"}}/>
+                </td>
+            </tr>
+            <tr>
+                <td width="10%">{ay}</td>
+            </tr>
+            <tr>
+                <td width="10%">{az}</td>
+            </tr>
+            <tr>
+                <td rowSpan="3" width="10%">
+                    <div>速度</div>
+                    <div>(mm/s)</div>
+                </td>
+                <td width="10%">{vx}</td>
+                {/*速度曲线*/}
+                <td rowSpan="3" width="60%">
+                    <ReactEcharts option={sid?this.getVOpt(sid):{}} style={{height:"100px"}}/>
+                </td>
+            </tr>
+            <tr>
+                <td width="10%">{vy}</td>
+            </tr>
+            <tr>
+                <td width="10%">{vz}</td>
+            </tr>
+            </tbody>
+        </table>
+    };
+
     render() {
         const now_sensorData = toJS(store.now_sensorData);
         const {loading} = store;
@@ -36,77 +101,18 @@ export default class RealTime extends React.Component {
             const {sid,bat,temp,ax,ay,az,vx,vy,vz,stime} = d;
             return (
                 <div key={index}>
-                    <table cellSpacing="0" cellPadding="0" className="sensor_view">
-                        <tbody>
-                            <tr>
-                                <td rowSpan="9" width="20%">
-                                    <div>
-                                        <div>时间:</div>
-                                        <div>{moment(stime).format('HH:mm:ss')}</div>
-                                    </div>
-                                    <div style={{margin:"20px 0"}}>ID: {sid}</div>
-                                    <div>
-                                        <div>电量:</div>
-                                        <div>{(Number(bat)*100).toFixed(2)}%</div>
-                                    </div>
-                                </td>
-                                <td rowSpan="3" width="10%">
-                                    <div>温度</div>
-                                    <div>(℃)</div>
-                                </td>
-                                <td rowSpan="3" width="10%">{temp}</td>
-                                {/*温度曲线*/}
-                                <td rowSpan="3" width="60%">
-                                    <ReactEcharts option={this.getTOpt(sid)} style={{height:"100px"}}/>
-                                </td>
-                            </tr>
-                            <tr><td> </td></tr>
-                            <tr><td> </td></tr>
-                            <tr>
-                                <td rowSpan="3" width="10%">
-                                    <div>加速度</div>
-                                    <div>(g)</div>
-                                </td>
-                                <td width="10%">{ax}</td>
-                                {/*加速度曲线*/}
-                                <td rowSpan="3" width="60%">
-                                    <ReactEcharts option={this.getAOpt(sid)} style={{height:"100px"}}/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="10%">{ay}</td>
-                            </tr>
-                            <tr>
-                                <td width="10%">{az}</td>
-                            </tr>
-                            <tr>
-                                <td rowSpan="3" width="10%">
-                                    <div>速度</div>
-                                    <div>(mm/s)</div>
-                                </td>
-                                <td width="10%">{vx}</td>
-                                {/*速度曲线*/}
-                                <td rowSpan="3" width="60%">
-                                    <ReactEcharts option={this.getVOpt(sid)} style={{height:"100px"}}/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td width="10%">{vy}</td>
-                            </tr>
-                            <tr>
-                                <td width="10%">{vz}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    {this.getTemplate(sid,bat,temp,ax,ay,az,vx,vy,vz,stime)}
                 </div>
             )
         });
         return (
             <div>
-                <Spin spinning={loading}
-                      className="realtime_loading"
-                      size="large"/>
-                {!now_sensorData.length?<div>暂无数据上传，接收中...</div>:sensor}
+                {!now_sensorData.length?
+                    <Spin spinning={loading}
+                          className="realtime_loading"
+                          size="large">
+                        {this.getTemplate()}
+                    </Spin> : sensor}
             </div>
         )
     }

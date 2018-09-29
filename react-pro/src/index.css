@@ -16,19 +16,3 @@ a:hover{
 html,body,:global(#root){
   height: 100%;
 }
-
-footer{
-  position: fixed;
-  bottom:0;
-  width:100%;
-  display: flex!important;
-  height: 40px;
-  line-height: 40px;
-  background: #ddd;
-  z-index: 999;
-}
-
-footer div{
-  flex: 1;
-  text-align: center;
-}

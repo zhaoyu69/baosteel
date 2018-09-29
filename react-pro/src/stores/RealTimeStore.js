@@ -19,11 +19,19 @@ export default class RealTimeStore{
         client.onConnectionLost = onConnectionLost;
         client.onMessageArrived = onMessageArrived;
 
-        client.connect({onSuccess:onConnect});
+        client.connect({
+            onSuccess:onConnect,
+            keepAliveInterval:30,
+            // reconnect:true
+        });
+
+        client.disconnect({
+            reconnect:true
+        });
 
         function onConnect() {
             console.log("onConnect");
-            client.subscribe("/gova/baosteel/mjs/01");
+            client.subscribe("/gova/baosteel/mjs/01",{qos:1});
         }
 
         function onConnectionLost(responseObject) {

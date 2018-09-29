@@ -5,22 +5,18 @@ import {
     Router,
     Route,
     Switch,
-    Link
 } from 'react-router-dom';
 import { createHashHistory } from 'history';
 import RealTime from "./components/RealTime";
 import Params from "./components/Params";
 import History from './components/History';
+import Footer from './components/Footer';
 const history = createHashHistory();
 
 ReactDOM.render(
     <Router history={history}>
         <div style={{paddingBottom:40}}>
-            <footer>
-                <div><Link to="/">实时</Link></div>
-                <div><Link to="/history">历史</Link></div>
-                <div><Link to="/params">参数</Link></div>
-            </footer>
+            <Footer/>
             <Switch>
                 <Route exact path="/" component={RealTime} />
                 <Route path="/history" component={History} />
