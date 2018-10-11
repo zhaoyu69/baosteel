@@ -13,7 +13,7 @@ export default class RealTimeStore{
     @action connectMQTT = () => {
         const that = this;
         const Paho = window["Paho"];
-        const client = new Paho.MQTT.Client("202.102.89.214", Number(61613), "zy" + new Date().getTime());
+        const client = new Paho.MQTT.Client("202.102.89.214", Number(61623), "zy" + new Date().getTime());
         console.log(client);
 
         client.onConnectionLost = onConnectionLost;
@@ -22,6 +22,8 @@ export default class RealTimeStore{
         client.connect({
             onSuccess:onConnect,
             keepAliveInterval:30,
+            userName:"admin",
+            password:"password",
             // reconnect:true
         });
 
