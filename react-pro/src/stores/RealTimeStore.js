@@ -13,7 +13,7 @@ export default class RealTimeStore{
     @action connectMQTT = () => {
         const that = this;
         const Paho = window["Paho"];
-        const client = new Paho.MQTT.Client("test.mosquitto.org", Number(8080), "zy" + new Date().getTime());
+        const client = new Paho.MQTT.Client("202.102.89.214", Number(61613), "zy" + new Date().getTime());
         console.log(client);
 
         client.onConnectionLost = onConnectionLost;
@@ -31,7 +31,7 @@ export default class RealTimeStore{
 
         function onConnect() {
             console.log("onConnect");
-            client.subscribe("/gova/baosteel/mjs/01",{qos:1});
+            client.subscribe("gova/baosteel/mjs/01",{qos:1});
         }
 
         function onConnectionLost(responseObject) {
